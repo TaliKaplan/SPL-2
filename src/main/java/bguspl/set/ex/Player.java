@@ -88,7 +88,7 @@ public class Player implements Runnable {
         this.terminate = false;
         this.score = 0;
         this.ableToRun = false;
-        this.actions = new LinkedBlockingQueue<>(3);
+        this.actions = new LinkedBlockingQueue<>(Dealer.SET_SIZE);
     }
 
     /**
