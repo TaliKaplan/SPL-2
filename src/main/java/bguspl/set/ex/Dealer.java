@@ -268,10 +268,12 @@ public class Dealer implements Runnable {
     private void notifyPlayers(){
         for(Player p: players){
             p.ableToRun = true;
+            if(!p.isHuman())
+                p.notifyAI();
         }
 
         synchronized (playersLock){
-            playersLock.notifyAll(); //notify all players at once so no player would have an advantage over other players
+            playersLock.notifyAll();
         }
     }
 

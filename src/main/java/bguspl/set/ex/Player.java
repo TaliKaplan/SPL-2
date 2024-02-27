@@ -68,6 +68,7 @@ public class Player implements Runnable {
     private final BlockingQueue<Integer> actions;
     protected PlayerStatus status;
     private final long UNFREEZE = 0;
+    private final long aiSleepBetweenKeypress = 1000; // ai waits a second between every two keypresses so it won't be so fast 
 
     /**
      * The class constructor.
@@ -111,7 +112,7 @@ public class Player implements Runnable {
             synchronized (actions) {
                 while ((!terminate) && actions.isEmpty()) { // there is nothing for the player to do
                     try {
-                        actions.wait();
+                        actions.wait(); //if !human - aiThread keeps running and will wake the player
                     } catch (InterruptedException ignored) {}
                 }
             }
@@ -143,6 +144,10 @@ public class Player implements Runnable {
 
                 int slot = rnd.nextInt(env.config.tableSize);
                 keyPressed(slot);
+
+                try{
+                    aiThread.sleep(aiSleepBetweenKeypress);
+                } catch(InterruptedException ignored){}
             }
             env.logger.info("thread " + Thread.currentThread().getName() + " terminated.");
         }, "computer-" + id);
@@ -239,7 +244,7 @@ public class Player implements Runnable {
                 numOfTokens++;
 
                 if (numOfTokens == Dealer.SET_SIZE) {
-                    ableToRun = false;
+                    ableToRun = false; //if !human - aiThread will be waiting too
                     dealer.addSetToCheck(id);
 
                     //wait for the dealer to check the set
@@ -267,11 +272,20 @@ public class Player implements Runnable {
 
     public synchronized void notifyPlayer(){
         ableToRun = true;
+        if(!human)
+            notifyAI();
+        
         notifyAll();
     }
 
     public synchronized void suspendPlayer(){
         ableToRun = false;
+    }
+
+    public void notifyAI(){
+        synchronized(aiThread){
+            notifyAll();
+        }
     }
 
     public void setPlayerThread(Thread playerThread){
@@ -280,5 +294,9 @@ public class Player implements Runnable {
 
     public void clearPlayerActions(){
         actions.clear();
+    }
+
+    public boolean isHuman(){
+        return this.human;
     }
 }
