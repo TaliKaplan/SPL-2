@@ -159,6 +159,10 @@ public class Player implements Runnable {
      */
     public void terminate() {
         terminate = true;
+
+        try {
+            aiThread.join();
+        }catch (InterruptedException ignored){}
     }
 
     /**

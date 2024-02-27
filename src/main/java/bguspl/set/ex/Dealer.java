@@ -118,7 +118,7 @@ public class Dealer implements Runnable {
     public void terminate() {
         notifyPlayers();
 
-        for(int i = 0; i < players.length; i++){
+        for(int i = players.length - 1; i <= 0; i--){
             players[i].terminate();
             synchronized (players[i]){ //in case the player waits for a keypress
                 players[i].notifyAll();
