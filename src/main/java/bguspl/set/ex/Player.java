@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-enum PlayerStatus {Penalty,Point,Continue, Terminated}
+enum PlayerStatus {Penalty,Point,Continue}
 
 /**
  * This class manages the players' threads and data
