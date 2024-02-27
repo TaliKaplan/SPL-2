@@ -110,10 +110,6 @@ public class Dealer implements Runnable {
             checkSets();
             placeCardsOnTable();
         }
-
-        for (Player p: players) {
-            p.ableToRun = false;
-        }
     }
 
     /**
