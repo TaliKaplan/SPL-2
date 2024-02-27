@@ -234,6 +234,8 @@ public class Dealer implements Runnable {
                 max = player.score();
                 winners.add(player.id);
             }
+            else if(player.score() == max)
+                    winners.add(player.id);
         }
 
         int[] ids = new int[winners.size()];
